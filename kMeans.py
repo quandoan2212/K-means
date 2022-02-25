@@ -15,7 +15,7 @@ class KMeans:
     def solveKmeans(self):
         pass
 
-    def measure_distance_to_centr(self):
+    def __measure_distance_to_centr(self):
         result = list()
 
         #Calculate the matrix contains distance values of all point in list to centroid points in the list
@@ -28,7 +28,7 @@ class KMeans:
             result.append(point_distance)
         return result
 
-    def grouping_points(self, list_distance):
+    def __grouping_points(self, list_distance):
         result = list()
         subset = dict()
         for centr in self.list_centr:
@@ -38,15 +38,19 @@ class KMeans:
             position = self.list_centr.index(centr)
             for p in list_distance:
                 if p.index(min(p)) == position:
-                    subset["points"].append(p)
+                    subset["points"].append(list_distance.index(p))
                     list_distance.remove(p)
             result.append(subset)
         return result
 
 
-    def calc_average(self):
-        pass
-
+    def __calc_average(self, list_centr_subset):
+        self.list_centr.clear()
+        for subset in list_centr_subset:
+            x = mean([self.list_points[x].x for x in subset["points"]])
+            y = mean([self.list_points[x].y for x in subset["points"]])
+            new_centr = Point(name=subset["name"], x=x, y=y)
+            self.list_centr.append(new_centr)
 
 
 

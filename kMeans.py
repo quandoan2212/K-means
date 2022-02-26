@@ -13,11 +13,28 @@ class KMeans:
             raise Exception("==== Number of initial centroids must equal to K value ====")
 
     def solveKmeans(self):
-        pass
+        converge_time = 0
+        while True:
+            converge_time += 1
+            list_point_distance = self.__measure_distance_to_centr()
+
+            if converge_time == 1:
+                self.centr_subset = self.__grouping_points(list_point_distance)
+                self.__calc_average(self.centr_subset)
+                continue
+
+            # compare centroids' subsets, if there is no changes, break loop.
+            if self.__grouping_points(list_point_distance) == self.centr_subset:
+                return [converge_time, self.centr_subset, self.list_centr]
+            else:
+                self.centr_subset = self.__grouping_points(list_point_distance)
+                self.__calc_average(self.centr_subset)
+                continue
+
+
 
     def __measure_distance_to_centr(self):
         result = list()
-
         #Calculate the matrix contains distance values of all point in list to centroid points in the list
         point_distance = list()
         for p in self.list_points:
@@ -25,7 +42,7 @@ class KMeans:
             for centr in self.list_centr:
                 distance = p.measure_distance_to_other_point(centr, self.measure_type)
                 point_distance.append(distance)
-            result.append(point_distance)
+            result.append(point_distance.copy())
         return result
 
     def __grouping_points(self, list_distance):
@@ -39,8 +56,7 @@ class KMeans:
             for p in list_distance:
                 if p.index(min(p)) == position:
                     subset["points"].append(list_distance.index(p))
-                    list_distance.remove(p)
-            result.append(subset)
+            result.append(subset.copy())
         return result
 
 

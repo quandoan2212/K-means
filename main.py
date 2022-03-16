@@ -14,3 +14,7 @@ print(result)
 for p in result[2]:
     print("CentrName: "+ p.name + ", x=" + str(p.x) + ", y=" + str(p.y))
 
+
+
+print("hello")
+
